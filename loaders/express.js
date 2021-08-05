@@ -12,11 +12,11 @@ module.exports = async(app) => {
     app.use(express.json({limit: '50mb'}));
     app.use(express.urlencoded({extended:true}));
     
-
+    console.log(process.env.PORT)
     app.use(api);
     
     app.listen(process.env.PORT || 50003, () => {
-        console.log(`Server started on port ${process.env.PORT || 50003}`);
+        console.log(`Server started on port ${process.env.PORT || 50001}`);
     });
 
     console.log('Express has been Initialized');
