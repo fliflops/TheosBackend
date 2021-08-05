@@ -4,6 +4,15 @@ const fs            = require('fs');
 const excel         = require('exceljs');
 const moment        = require('moment');
 
+exports.preAlertHeaderValidation = async(bookings) => {
+    try{
+        // console.log(bookings)
+    }
+    catch(e){
+        throw e
+    }
+}
+
 exports.retrieveBookingsPerStc = async ({
     bookings,
     vehicle,
@@ -23,8 +32,6 @@ exports.retrieveBookingsPerStc = async ({
             Object.keys(groupBySTC).map(stc => {
                 const data = groupBySTC[stc]
                 const selectedShipPoint = _.find(shipPoints,row => row.ship_to_code === stc)//shipPoints.filter(x => x.ship_to_code === stc)
-
-                console.log(stc,selectedShipPoint)
                 const rdd       = deliveryDate.format('YYYY-MM-DD')
                 const total_cbm = _.round(_.sum(data.map(x => parseFloat(x.cbm))),2)
                 const total_wt  = _.round(_.sum(data.map(x => parseFloat(x.wt))),2)
@@ -35,19 +42,22 @@ exports.retrieveBookingsPerStc = async ({
                 tempUtilized.push({
                     id: v4(),
                     rdd,
-                    ship_to_code: stc,
-                    consignee_id: selectedShipPoint.consignee_id,
-                    cluster_code: selectedShipPoint.cluster_code,
-                    city:         selectedShipPoint.city,
-                    is_Drop1:     selectedShipPoint.is_Drop1,
+                    ship_to_code:   stc,
+                    consignee_id:   selectedShipPoint.consignee_id,
+                    cluster_code:   selectedShipPoint.cluster_code,
+                    city:           selectedShipPoint.city,
+                    is_Drop1:       selectedShipPoint.is_Drop1,
                     total_cbm,
                     total_wt,
-                    distance:'',
-                    lat:selectedShipPoint.lat,
-                    long:selectedShipPoint.long,
-                    '6W_cbm_util'   :cbm_util,
-                    '6W_wt_util'    :wt_util,
-                    Util_factor     :cbm_util > wt_util ? cbm_util:wt_util
+                    distance:       '',
+                    lat:            selectedShipPoint.lat,
+                    long:           selectedShipPoint.long,
+                    '6W_cbm_util':  cbm_util,
+                    '6W_wt_util':   wt_util,
+                    cbm_util_factor:cbm_util,
+                    wt_util_factor: wt_util,
+                    Util_factor:    cbm_util > wt_util ? cbm_util:wt_util,
+                    is_cbm:     cbm_util > wt_util ? true : false
                 })
 
             })
@@ -176,7 +186,7 @@ exports.exportUtilizedToExcel = async ({
     }
     catch(e){
         console.log(e)
-        return ''
+        throw e
     }
     
 }

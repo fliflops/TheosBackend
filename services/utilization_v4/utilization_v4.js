@@ -42,7 +42,6 @@ module.exports = async ({
         capacity:capacity4W,
         truckType:'4W',
         smDrops:smDrop4W
-
     })
 
     const utilizedL300 = await utilization({
@@ -64,15 +63,15 @@ module.exports = async ({
     })
 
     const utilizedSedan= await utilization({
-        bookings:utilizedAuv,
-        drops:sedandrops,
-        radius:radiusSedan,
-        capacity:capacitySedan,
-        truckType:'Sedan',
-        smDrops:smDropSedan
+        bookings:   utilizedAuv,
+        drops:      sedandrops,
+        radius:     radiusSedan,
+        capacity:   capacitySedan,
+        truckType:  'Sedan',
+        smDrops:    smDropSedan
     })
 
-    return{
+    return {
         utilized: utilizedSedan,
         notAllocated: await notUtilized({
             bookings:batch0Bookings,
@@ -346,7 +345,7 @@ const sixWheelUtilization = async({
                         })
 
                         if(typeof lastDrop !== 'undefined'){
-                            availableBookings =  availableBookings.map(item => {
+                            availableBookings = availableBookings.map(item => {
                                     const distance = (getDistance(
                                     {latitude:lastDrop.lat,     longitude:lastDrop.long},
                                     {latitude:item.lat,         longitude:item.long})) / 1000
@@ -414,7 +413,7 @@ const breakdownBookings = async({
                     total.push({...item,
                             "id":`${item.id}-${truckNo}`,
                             "ship_to_code": truckNo === 1 ? item.ship_to_code : `${item.ship_to_code}-${truckNo}`,
-                            "Util_factor": (totalUtil_factor >= upper_limit ? upper_limit : totalUtil_factor % upper_limit)
+                            "Util_factor": (totalUtil_factor >= upper_limit ? upper_limit : totalUtil_factor % upper_limit),
                     });
                     totalUtil_factor-=upper_limit
                     truckNo++;

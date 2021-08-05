@@ -26,7 +26,13 @@ exports.retrieveConfigV2 = async () => {
         type:sequelize.QueryTypes.SELECT
     })
     .then(result => JSON.parse(JSON.stringify(result)))
-    // models.utilization_config_v2_tbl.findAll().then(result => JSON.parse(JSON.stringify(result)))
+}
+
+exports.retrieveConfigV3 = async () => {
+    return await sequelize.query(`sp_config_retrieve_v2`,{
+        type:sequelize.QueryTypes.SELECT
+    })
+    .then(result => JSON.parse(JSON.stringify(result)))
 }
 
 exports.resetConfig = async () => {

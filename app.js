@@ -17,9 +17,6 @@ startServer = async () => {
     //     res.sendFile(path.join(__dirname+'/client/build/index.html'));
     // });
 
-    // app.listen(process.env.PORT || 50003, () => {
-    //     console.log(`Server started on port ${process.env.PORT || 50003}`);
-    // });
 }
 
 startServer();

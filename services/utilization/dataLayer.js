@@ -61,7 +61,9 @@ exports.bulkCreateUtilizedDetails = async({
     utilizedData
 }) => {
     try{
-        await models.utilization_details_tbl.bulkCreate(utilizedData)
+        await models.utilization_details_tbl.bulkCreate(utilizedData,{
+            logging:false
+        })
     }
     catch(e){
         console.log(e)

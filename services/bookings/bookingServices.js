@@ -1,6 +1,4 @@
 const dataLayer = require('./bookingDataLayer');
-const sftpService = require('../sftp');
-const csv = require('csvtojson/v2');
 const moment = require('moment');
 
 exports.getBookings = async(filter) => {
@@ -53,8 +51,7 @@ exports.groupBookingsRDD = async ({
             })
            
         }   
-    
-    
+
         return {
             groupedData:data
         }

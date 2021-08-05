@@ -11,10 +11,4 @@ module.exports = async() => {
     catch(e){
         console.log('Error:' + e)
     }
-    
-    // await sequelize.authenticate()
-    // .then(() => {
-    //     console.log('Successfully established a connection to Database')
-    // })
-    // .catch(err => console.log('Error:' + err));
 }

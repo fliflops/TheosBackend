@@ -1,6 +1,4 @@
 module.exports = {
-
-    //ShopifyDB Credentials
     dbCredentials:{
         username:'sa',
         password:'R@mc02019!',
@@ -16,21 +14,5 @@ module.exports = {
             acquire: 30000,
             idle: 10000
         }
-    },
-
-    //SCMDB Credentials
-    scmdbCredentials:{
-        username:'sa',
-        password:'R@mc02019!',
-        database:'scmdb',
-        host:'13.250.206.211',
-        dialect:'mssql'
-    },
-
-	//SFTP Credentials
-	sftpCredentials:{
-		host:'ec2-18-138-191-166.ap-southeast-1.compute.amazonaws.com',
-		username:'LogSFTP',
-		password:'WM$ft317'
-	}
+    }
 }

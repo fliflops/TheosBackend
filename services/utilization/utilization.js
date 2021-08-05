@@ -429,9 +429,8 @@ exports.bulkCreateUtilizedDetails =  async({
                     drop:           item.drop,	
                     creted_date:    moment().format('MM-DD-YYYY HH:mm:ss')
                 }
-            }
-        )}
-    )
+            })
+        })
     }
     catch(e){
         console.log(e)

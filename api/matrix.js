@@ -11,30 +11,42 @@ const utilizationService = require('../services/utilization');
 const preAlertService   = require('../services/preAlert');
 const configurationService = require('../services/config');
 const utilizationServiceV2 = require('../services/utilization_v2');
+const shipToService         = require('../services/shipPoints');
 
 const utilizationServiceV3 = require('../services/utilization_v3');
-    const utilization_v4 = require('../services/utilization_v4');
+const utilization_v4 = require('../services/utilization_v4');
 
-router.post('/upload',async(req,res) =>     {
+
+router.put('/config', async (req,res) => {
+        try{
+            const {configData} = req.body;
+    
+            await configurationService.updateConfiguration({
+                configData
+            })
+            res.status(200).end();
+            
+        }
+        catch(e){
+            res.status(500).end();
+        }   
+       
+})
+
+router.post('/v1',async(req,res) => {
     const {data,shipToCodes} = req.body;
     let mergedUtilized          = [];
     let dropCountReport         = [];
     let truckTypeCountReport    = [];
     let unAllocated             = [];
 
-    // const config = (await utilizationService.retrieveConfig())[0]
     const config2 = await configurationService.retrieveConfig();
 
-    const vehicle = await vehicleService.retrieveVehicles({
-            // truckType:'6W'
-    }); 
+    const vehicle = await vehicleService.retrieveVehicles({}); 
 
     const shipPoints = await vehicleService.retrieveShipTo({
         shipTo: shipToCodes
     });
-
-    // const validate = shipPoints.filter(item => shipToCodes.includes(item.ship_to_code))    
-    // console.log(validate);
 
     const preAlert = await preAlertService.retrieveBookingsPerStc({
         bookings:data,
@@ -140,31 +152,22 @@ router.post('/upload',async(req,res) =>     {
     res.download(excel); 
 })
 
-router.put('/config', async (req,res) => {
-    try{
-        const {configData} = req.body;
+router.post('/v2', async(req,res) => {
 
-        await configurationService.updateConfiguration({
-            configData
-        })
-        res.status(200).end();
-        
-    }
-    catch(e){
-        res.status(500).end();
-    }   
-   
-})
-
-router.post('/utilization-v3', async(req,res) => {
-
+   try{
     const {data,shipToCodes} = req.body;
     let mergedUtilized          = [];
     let dropCountReport         = [];
     let truckTypeCountReport    = [];
     let unAllocated             = [];
 
-    // const config = (await utilizationService.retrieveConfig())[0]
+    const notExistShipto = await shipToService.validateShipTo({shipTolist:shipToCodes});
+    if(notExistShipto.length > 0){
+        return res.status(404).json({
+            message:`STC not exists ${notExistShipto.map(item => item.value).join(',')}`
+        })
+    }
+    
     const config2 = await configurationService.retrieveConfig();
     
     const vehicle = await vehicleService.retrieveVehicles({
@@ -182,9 +185,9 @@ router.post('/utilization-v3', async(req,res) => {
     });
 
     const {transactionId} = await utilizationService.createUtilizationHeader({
-        delivery_date:_.min(preAlert.map(row => row.deliveryDate)),
-        rdd_from:_.min(preAlert.map(row => row.deliveryDate)),
-        rdd_to:_.max(preAlert.map(row => row.deliveryDate)),
+        delivery_date:  _.min(preAlert.map(row => row.deliveryDate)),
+        rdd_from:       _.min(preAlert.map(row => row.deliveryDate)),
+        rdd_to:         _.max(preAlert.map(row => row.deliveryDate)),
         // config
     })
 
@@ -283,7 +286,15 @@ router.post('/utilization-v3', async(req,res) => {
     })
 
     res.download(excel); 
+   }
+   catch(e){
+        console.log(e)
+        res.status(500).json({
+            message:`${e}`
+        })
+    }
 
 })
+
 
 module.exports = router;

@@ -20,6 +20,10 @@ exports.retrieveConfig = async() => {
     return await dataLayer.retrieveConfigV2()
 }
 
+exports.retrieveConfigV3 = async() => {
+    return await dataLayer.retrieveConfigV3()
+}
+
 exports.resetConfig = async() => {
     try{
 
