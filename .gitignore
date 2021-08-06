@@ -2,3 +2,4 @@ node_modules
 err.log
 out.log
 .env
+ecosystem.config.js
